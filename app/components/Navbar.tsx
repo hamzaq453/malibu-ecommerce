@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaUser, FaHeart, FaShoppingBag, FaSearch } from 'react-icons/fa';
+import Image from 'next/image';
 
 const categories = [
   'New In',
@@ -26,7 +27,7 @@ const Navbar: React.FC = () => {
         {/* Left spacer for balance */}
         <div className="w-[200px]"></div>
         {/* Brand Name */}
-        <div className="text-3xl font-bold tracking-widest">PINK MALIBU</div>
+        <Image src="/Logo.png" alt="Pink Malibu Logo" className="h-12 mx-auto" width={200} height={200}/>
         {/* Right Icons */}
         <div className="flex items-center gap-6 w-[200px] justify-end">
           <FaSearch className="w-5 h-5 cursor-pointer" />
