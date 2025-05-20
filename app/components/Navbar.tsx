@@ -6,63 +6,21 @@ import {
   FaSearch,
   FaBars,
   FaTimes,
-  FaUser,
 } from 'react-icons/fa';
 import Image from 'next/image';
 
 const categories = [
-  { name: 'New In', img: '/Hero3.png' },
-  { name: 'Back In Stock', img: '/Hero4.png' },
-  { name: 'Clothing', img: '/Hero3.png' },
-  { name: 'Occasions', img: '/Hero4.png' },
-  { name: 'Tops', img: '/Hero3.png' },
-  { name: 'Dresses', img: '/Hero4.png' },
-  { name: 'Loungewear', img: '/Hero3.png' },
-  { name: 'Sets', img: '/Hero4.png' },
-  { name: 'Bottoms', img: '/Hero3.png' },
-  { name: 'Swimwear', img: '/Hero4.png' },
+  { name: 'NEW IN', img: '/Hero3.png' },
+  { name: 'BACK IN STOCK', img: '/Hero4.png' },
+  { name: 'CLOTHING', img: '/Hero3.png' },
+  { name: 'OCCASIONS', img: '/Hero4.png' },
+  { name: 'TOPS', img: '/Hero3.png' },
+  { name: 'DRESSES', img: '/Hero4.png' },
+  { name: 'LOUNGEWEAR', img: '/Hero3.png' },
+  { name: 'SETS', img: '/Hero4.png' },
+  { name: 'BOTTOMS', img: '/Hero3.png' },
+  { name: 'SWIMWEAR', img: '/Hero4.png' },
 ];
-
-// Shared block style
-const blockClass =
-  'p-4 border rounded-md shadow-sm mb-6 flex items-center justify-between';
-
-const CustomerCareBlock = () => (
-  <div className={`${blockClass} bg-white`}>
-    <a
-      href="#"
-      className="block text-sm font-semibold text-black hover:text-pink-400"
-    >
-      Customer Care
-    </a>
-  </div>
-);
-
-const LoyaltyClubBlock = () => (
-  <div
-    className={`${blockClass} bg-pink-500 cursor-pointer hover:bg-pink-600 transition text-white`}
-  >
-    <div className="flex items-center gap-2">
-      <FaHeart />
-      <a href="#" className="text-sm font-semibold">
-        Loyalty Club
-      </a>
-    </div>
-  </div>
-);
-
-const AuthBlock = () => (
-  <div className={`${blockClass} bg-black text-white`}>
-    <div className="flex items-center gap-2">
-      <FaUser />
-      <span className="text-sm font-semibold">Login</span>
-    </div>
-    <div className="w-px h-5 bg-white" />
-    <div className="flex items-center gap-2">
-      <span className="text-sm font-semibold">Register</span>
-    </div>
-  </div>
-);
 
 const Navbar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -119,7 +77,7 @@ const Navbar: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Sidebar */}
+      {/* Mobile Menu Overlay */}
       <div
         className={`fixed inset-0 z-50 transition-transform duration-300 ${
           menuOpen ? 'translate-x-0' : '-translate-x-full'
@@ -132,33 +90,31 @@ const Navbar: React.FC = () => {
         />
 
         {/* Sidebar Content */}
-        <div className="relative bg-white w-4/5 h-full p-6 overflow-y-auto shadow-lg">
-          {/* Close Icon */}
-          <FaTimes
-            className="absolute top-4 right-4 w-5 h-5 cursor-pointer text-black"
-            onClick={() => setMenuOpen(false)}
-          />
+        <div className="relative bg-white w-[75%] h-full overflow-y-auto">
+          {/* Close Button */}
+          <div className="flex justify-end p-4 border-b border-gray-100">
+            <button onClick={() => setMenuOpen(false)}>
+              <FaTimes className="w-6 h-6 text-black" />
+            </button>
+          </div>
 
-          {/* Category Blocks */}
-          <div className="flex flex-col gap-4 mt-8">
+          {/* Category Links */}
+          <div className="py-2">
             {categories.map((cat) => (
               <a
                 key={cat.name}
                 href="#"
-                className={`${blockClass} border-gray-200 hover:bg-pink-100 transition`}
-                style={{ minHeight: '3.5rem' }}
+                className="flex items-center justify-between px-6 py-4 hover:bg-gray-50 transition-colors"
               >
-                <span className="text-sm font-semibold uppercase text-black">
+                <span className="text-black text-base font-medium tracking-wide">
                   {cat.name}
                 </span>
-                <div
-                  className="relative rounded-md overflow-hidden"
-                  style={{ width: '4rem', height: '2.25rem' }}
-                >
+                <div className="relative w-16 h-12 rounded-sm overflow-hidden">
                   <Image
                     src={cat.img}
                     alt={cat.name}
                     fill
+                    sizes="64px"
                     className="object-cover"
                   />
                 </div>
@@ -166,12 +122,34 @@ const Navbar: React.FC = () => {
             ))}
           </div>
 
-          {/* Extra Blocks */}
-          <div className="mt-8">
-            <CustomerCareBlock />
-            <LoyaltyClubBlock />
-            <AuthBlock />
-          </div>
+          {/* Additional Links */}
+          {/* <div className="border-t border-gray-100 py-4 px-6">
+            <a href="#" className="block py-3 text-black font-medium">
+              Customer Care
+            </a>
+            <a href="#" className="block py-3 text-black font-medium">
+              Track My Order
+            </a>
+            <a href="#" className="block py-3 text-black font-medium">
+              Size Guide
+            </a>
+          </div> */}
+
+          {/* Account Section */}
+          {/* <div className="border-t border-gray-100 py-4 px-6">
+            <div className="flex items-center gap-2 mb-3">
+              <FaUser className="w-5 h-5" />
+              <span className="font-medium">Account</span>
+            </div>
+            <div className="flex gap-4">
+              <button className="flex-1 bg-black text-white py-2 text-sm font-medium">
+                Sign In
+              </button>
+              <button className="flex-1 border border-black py-2 text-sm font-medium">
+                Register
+              </button>
+            </div>
+          </div> */}
         </div>
       </div>
     </nav>
