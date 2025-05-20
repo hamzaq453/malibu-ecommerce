@@ -3,6 +3,7 @@ import Image from 'next/image';
 import HeroImage1 from '../../public/Hero3.png';
 import HeroImage2 from '../../public/Hero4.png';
 
+
 const HeroSection: React.FC = () => {
   return (
     <section className="relative w-full h-[90vh] md:h-[80vh]">
@@ -23,6 +24,7 @@ const HeroSection: React.FC = () => {
 
         {/* Right Image */}
         <div className="relative w-full md:w-1/2 h-1/2 md:h-full">
+
           <Image
             src={HeroImage2}
             alt="Hero Background Right"
@@ -50,5 +52,6 @@ const HeroSection: React.FC = () => {
     </section>
   );
 };
+
 
 export default HeroSection;
