@@ -1,9 +1,15 @@
-import HeroSection from './components/HeroSection';
+import React from 'react'
+import HeroSection from './components/HeroSection'
 
-export default function Home() {
+
+const page = () => {
   return (
-    <div className="min-h-screen">
+    <div>
+
       <HeroSection />
     </div>
-  );
+  )
 }
+
+export default page
+
