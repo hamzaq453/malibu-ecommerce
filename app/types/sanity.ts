@@ -1,4 +1,4 @@
-import { Image } from 'sanity'
+import { Image, PortableTextBlock } from 'sanity'
 
 export interface SanityProduct {
   _id: string;
@@ -6,7 +6,7 @@ export interface SanityProduct {
   slug: {
     current: string;
   };
-  description: any[];
+  description: PortableTextBlock[];
   price: number;
   compareAtPrice?: number;
   images: Image[];

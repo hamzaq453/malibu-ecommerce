@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image';
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useMemo } from 'react';
 
 interface Product {
   name: string;
@@ -11,7 +11,7 @@ interface Product {
 }
 
 export default function Home() {
-  const products: Product[] = [
+  const products = useMemo<Product[]>(() => [
     { name: 'With Love In The Moment Oversized Hoodie Grey Marle', image: '/images/product1.png', price: '$69.99 USD', discount: '15% OFF' },
     { name: 'In The Back Of My Mind Mini Dress Chocolate Polka Dot', image: '/images/product2.png', price: '$64.99 USD' },
     { name: 'Offstage Hoodie Moon', image: '/images/product3.png', price: '$69.99 USD' },
@@ -22,7 +22,7 @@ export default function Home() {
     { name: 'Sirena Rib Tank White', image: '/images/product8.png', price: '$49.99 USD' },
     { name: '11th Street She\'s So Lucky Oversized Hoodie Leopard Splice', image: '/images/product9.png', price: '$69.99 USD' },
     { name: 'Tonia Soul Of The Heart Mini Dress Chocolate Polka Dot', image: '/images/product10.png', price: '$64.99 USD' },
-  ];
+  ], []); // Empty dependency array since products are static
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
