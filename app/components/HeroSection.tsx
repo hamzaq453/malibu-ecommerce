@@ -1,38 +1,34 @@
 import React from 'react';
-import Image from 'next/image';
-import HeroImage1 from '../../public/Hero3.png';
-import HeroImage2 from '../../public/Hero4.png';
-
+// import Image from 'next/image';
+// import HeroImage1 from '../../public/Hero3.png';
+// import HeroImage2 from '../../public/Hero4.png';
+// import HeroImage3 from '../../public/Image1.jpg';
+// import HeroImage4 from '../../public/Image2.jpg';
 
 const HeroSection: React.FC = () => {
   return (
-    <section className="relative w-full h-[90vh] md:h-[80vh]">
-      {/* Images Container */}
+    <section className="relative w-full h-[90vh] md:h-[90vh]">
+      {/* Video and Image Container */}
       <div className="flex flex-col md:flex-row w-full h-full">
-        {/* Left Image */}
+        {/* Left Video */}
         <div className="relative w-full md:w-1/2 h-1/2 md:h-full">
-          <Image
-            src={HeroImage1}
-            alt="Hero Background Left"
-            fill
-            priority
-            sizes="100vw"
-            quality={100}
-            className="object-cover"
+          <video
+            src="/Video1.mp4"
+            autoPlay
+            loop
+            muted
+            className="object-cover w-full h-full"
           />
         </div>
 
         {/* Right Image */}
         <div className="relative w-full md:w-1/2 h-1/2 md:h-full">
-
-          <Image
-            src={HeroImage2}
-            alt="Hero Background Right"
-            fill
-            priority
-            sizes="100vw"
-            quality={100}
-            className="object-cover"
+        <video
+            src="/Video2.mp4"
+            autoPlay
+            loop
+            muted
+            className="object-cover w-full h-full"
           />
         </div>
       </div>
@@ -52,6 +48,5 @@ const HeroSection: React.FC = () => {
     </section>
   );
 };
-
 
 export default HeroSection;
