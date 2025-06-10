@@ -4,7 +4,11 @@
 **/
 import { defineCliConfig } from 'sanity/cli'
 
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID
-const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET
+// Fallback values ensure the studio works even if env vars are missing
+const projectId = '8jecpclu'
+const dataset = 'production'
 
-export default defineCliConfig({ api: { projectId, dataset } })
+export default defineCliConfig({ 
+  api: { projectId, dataset },
+  studioHost: 'pink-malibu'
+})

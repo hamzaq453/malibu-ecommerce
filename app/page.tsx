@@ -1,6 +1,6 @@
 import React from 'react'
 import HeroSection from './components/HeroSection'
-import Category from './components/category'
+import Category from './components/Category'
 
 const page = () => {
   return (
