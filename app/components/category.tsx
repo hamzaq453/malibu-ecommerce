@@ -7,14 +7,15 @@ interface Category {
 
 export default function Home() {
   const categories: Category[] = [
-    { name: 'Shop Lounge', image: '/category1.png' },
-    { name: 'Shop Tops', image: '/category2.png' },
-    { name: 'Shop Dresses', image: '/category3.png' },
-    { name: 'Summer Shop', image: '/category4.png' },
+    { name: 'Shop Hoodies', image: '/Image1.jpg' },
+    { name: 'Shop Bottoms', image: '/Image5.jpg' },
+    { name: 'Shop LoungeWear', image: '/Image4.jpg' },
+    { name: 'Summer Sets', image: '/Image3.jpg' },
   ];
 
   return (
-    <div className="bg-white py-4 px-4 sm:px-6 md:px-8">
+    <div className="bg-white py-12 px-4 sm:px-6 md:px-8">
+      <h2 className="text-3xl text-black font-bold text-center mb-6">SHOP BY CATEGORY</h2>
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4">
         {categories.map((category, index) => (
           <div
@@ -25,12 +26,12 @@ export default function Home() {
               focus:scale-105 focus:shadow-lg 
               transition-transform duration-300"
           >
-            <div className="relative w-full aspect-square">
+            <div className="relative w-full h-64">
               <Image
                 src={category.image}
                 alt={category.name}
                 fill
-                className="object-contain rounded-none shadow-md"
+                className="object-cover rounded-none shadow-md"
               />
             </div>
             <div
