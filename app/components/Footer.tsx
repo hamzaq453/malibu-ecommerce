@@ -42,7 +42,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-black text-gray-300 px-6 py-16">
+    <footer className="bg-black text-gray-300 px-6 py-10">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-6 text-center md:text-left">
         {/* LOGO + SOCIAL */}
         <div className="space-y-6 flex flex-col items-center md:items-start">
