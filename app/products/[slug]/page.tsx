@@ -75,11 +75,9 @@ const ProductDetailPage: React.FC = () => {
     setSelectedSize(size);
   };
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseMove = () => {
     if (!showZoom) return;
-    const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
-    const x = ((e.clientX - left) / width) * 100;
-    const y = ((e.clientY - top) / height) * 100;
+    // Zoom functionality removed
   };
 
   const handleAddToCart = () => {
@@ -293,7 +291,14 @@ const ProductDetailPage: React.FC = () => {
                   </svg>
                 </summary>
                 <div className="text-sm text-gray-600 mt-2">
-                  <PortableText value={product.description} />
+                  {product.description && (
+                    <PortableText
+                      value={product.description}
+                      components={{
+                        block: ({ children }) => <p className="mb-4">{children}</p>,
+                      }}
+                    />
+                  )}
                   {product.material && (
                     <ul className="list-disc list-inside mt-2">
                       <li>Material: {product.material}</li>
