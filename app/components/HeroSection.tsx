@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, SyntheticEvent } from 'react';
 import Image from 'next/image';
 
 
@@ -23,7 +23,7 @@ const HeroSection: React.FC = () => {
   };
 
   // Handle video errors
-  const handleVideoError = (videoId: 'video1' | 'video2', error: any) => {
+  const handleVideoError = (videoId: 'video1' | 'video2', error: SyntheticEvent<HTMLVideoElement, Event>) => {
     console.error(`Error loading ${videoId}:`, error);
   };
 

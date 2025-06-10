@@ -22,14 +22,6 @@ const ProductDetailPage: React.FC = () => {
   const [showZoom, setShowZoom] = useState(false);
   const { addItem } = useCart();
 
-  // Color variants (you can move this to your Sanity schema later)
-  const colorVariants = [
-    { name: 'Moon', image: '/moon.jpg' },
-    { name: 'Glacier Grey', image: '/glacier.jpg' },
-    { name: 'Azure', image: '/azure.jpg' },
-    // ... add more colors as needed
-  ];
-
   React.useEffect(() => {
     const fetchProduct = async () => {
       try {
