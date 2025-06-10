@@ -6,7 +6,6 @@ const TrendingProducts: React.FC = () => {
     { name: 'Pink Malibu Hoodie', image: '/Image6.jpg' },
     { name: 'Sky Malibu Hoodie', image: '/Image7.jpg' },
     { name: 'White branded Tshirt', image: '/Image8.jpg' },
-    { name: 'White branded Tshirt', image: '/Image4.jpg' },
   ];
 
   return (

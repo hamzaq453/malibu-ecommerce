@@ -229,7 +229,7 @@ const ProductDetailPage: React.FC = () => {
             </div>
 
             {/* Color Selection */}
-            <div className="space-y-4">
+            {/* <div className="space-y-4">
               <h3 className="text-sm font-semibold text-gray-800">MORE COLOURS</h3>
               <div className="grid grid-cols-4 gap-2">
                 {colorVariants.map((color, index) => (
@@ -241,7 +241,7 @@ const ProductDetailPage: React.FC = () => {
                   />
                 ))}
               </div>
-            </div>
+            </div> */}
 
             {/* Size Selection */}
             <div className="space-y-2">

@@ -52,7 +52,7 @@ const Cart: React.FC<CartProps> = ({
         }`}
       >
         {/* Header */}
-        <div className="flex justify-between items-center p-4 border-b border-gray-200">
+        <div className="flex justify-between items-center text-black p-4 border-b border-gray-200">
           <h2 className="text-lg font-semibold">Shopping Cart ({items.length})</h2>
           <button
             onClick={onClose}
@@ -76,7 +76,7 @@ const Cart: React.FC<CartProps> = ({
               </Link>
             </div>
           ) : (
-            <div className="p-4 space-y-4">
+            <div className="p-4 space-y-4 text-black">
               {items.map((item) => (
                 <div key={item._id} className="flex gap-4 py-4 border-b border-gray-100">
                   {/* Product Image */}
