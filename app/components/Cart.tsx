@@ -1,11 +1,15 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { FaTimes, FaPlus, FaMinus, FaArrowRight } from 'react-icons/fa';
 import { urlFor } from '@/sanity/lib/image';
 import { SanityImage } from '@/app/types/sanity';
 import Link from 'next/link';
+import { loadStripe } from '@stripe/stripe-js';
+
+// Initialize Stripe
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 interface CartItem {
   _id: string;
@@ -31,9 +35,45 @@ const Cart: React.FC<CartProps> = ({
   onUpdateQuantity,
   onRemoveItem,
 }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const shipping = subtotal > 99 ? 0 : 10; // Free shipping over $99
   const total = subtotal + shipping;
+
+  const handleCheckout = async () => {
+    try {
+      setIsLoading(true);
+      const stripe = await stripePromise;
+
+      if (!stripe) throw new Error('Stripe failed to initialize');
+
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          items: items.map(item => ({
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity,
+            image: urlFor(item.image).url(),
+          })),
+        }),
+      });
+
+      const { url } = await response.json();
+      
+      if (url) {
+        window.location.href = url;
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Something went wrong. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <>
@@ -157,16 +197,17 @@ const Cart: React.FC<CartProps> = ({
           </div>
 
           {/* Checkout Button */}
-          <Link
-            href="/checkout"
+          <button
+            onClick={handleCheckout}
+            disabled={items.length === 0 || isLoading}
             className="w-full bg-black text-white py-3 flex items-center justify-center gap-2 hover:bg-gray-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Checkout <FaArrowRight className="w-4 h-4" />
-          </Link>
+            {isLoading ? 'Processing...' : 'Checkout'} <FaArrowRight className="w-4 h-4" />
+          </button>
         </div>
       </div>
     </>
   );
 };
 
-export default Cart; 
+export default Cart;
