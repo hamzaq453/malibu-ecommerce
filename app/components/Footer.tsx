@@ -46,7 +46,7 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-6 text-center md:text-left">
         {/* LOGO + SOCIAL */}
         <div className="space-y-6 flex flex-col items-center md:items-start">
-          <Image src="/logo.png" alt="Logo" width={160} height={50} />
+          <Image src="/Logo.png" alt="Logo" width={160} height={50} />
           <div className="flex space-x-5 text-xl text-pink-500">
             <FaInstagram className="hover:text-pink-400 transition" />
             <FaTiktok className="hover:text-pink-400 transition" />
