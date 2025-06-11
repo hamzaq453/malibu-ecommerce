@@ -8,6 +8,7 @@ import {
   FaTimes,
 } from 'react-icons/fa';
 import Image from 'next/image';
+import { useCart } from '../context/CartContext';
 
 const categories = [
   { name: 'New Arrivals', img: '/Hero3.png' },
@@ -29,6 +30,9 @@ const categories = [
 const Navbar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [clothingExpanded, setClothingExpanded] = useState(false);
+  const { items, openCart } = useCart();
+
+  const cartItemCount = items.reduce((total, item) => total + item.quantity, 0);
 
   const handleClothingToggle = () => {
     setClothingExpanded(!clothingExpanded);
@@ -65,9 +69,20 @@ const Navbar: React.FC = () => {
         {/* Icons */}
         <div className="flex items-center gap-4 md:gap-6">
           <FaSearch className="w-5 h-5 cursor-pointer" />
-          <FaHeart className="w-5 h-5 cursor-pointer" />
-          <span className="text-xs hidden md:inline">0</span>
-          <FaShoppingBag size={20} className="cursor-pointer" />
+          <div className="relative">
+            <FaHeart className="w-5 h-5 cursor-pointer" />
+            <span className="absolute -top-2 -right-2 bg-pink-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+              0
+            </span>
+          </div>
+          <div className="relative cursor-pointer" onClick={openCart}>
+            <FaShoppingBag className="w-5 h-5" />
+            {cartItemCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-pink-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                {cartItemCount}
+              </span>
+            )}
+          </div>
         </div>
       </div>
 
@@ -78,21 +93,23 @@ const Navbar: React.FC = () => {
             <div key={cat.name} className="relative group">
               <a
                 href="#"
-                className="hover:text-pink-400 transition-colors whitespace-nowrap"
+                className="hover:text-pink-400 transition-colors whitespace-nowrap inline-block"
               >
                 {cat.name}
               </a>
               {cat.subcategories && (
-                <div className="absolute left-0 mt-2 w-48 bg-white text-black shadow-lg rounded-md opacity-0 group-hover:opacity-100 transition-opacity">
-                  {cat.subcategories.map((subcat) => (
-                    <a
-                      key={subcat}
-                      href="#"
-                      className="block px-4 py-2 hover:bg-gray-100"
-                    >
-                      {subcat}
-                    </a>
-                  ))}
+                <div className="absolute left-0 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                  <div className="w-48 bg-white text-black shadow-lg rounded-md">
+                    {cat.subcategories.map((subcat) => (
+                      <a
+                        key={subcat}
+                        href={cat.name === 'Clothing' && subcat === 'Hoodies and Sweaters' ? '/products' : '#'}
+                        className="block px-4 py-2 hover:bg-gray-100"
+                      >
+                        {subcat}
+                      </a>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
@@ -148,7 +165,7 @@ const Navbar: React.FC = () => {
                     {cat.subcategories.map((subcat) => (
                       <a
                         key={subcat}
-                        href="#"
+                        href={cat.name === 'Clothing' && subcat === 'Hoodies and Sweaters' ? '/products' : '#'}
                         className="block px-4 py-2 text-black hover:bg-gray-100"
                       >
                         {subcat}

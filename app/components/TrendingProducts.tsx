@@ -6,16 +6,15 @@ const TrendingProducts: React.FC = () => {
     { name: 'Pink Malibu Hoodie', image: '/Image6.jpg' },
     { name: 'Sky Malibu Hoodie', image: '/Image7.jpg' },
     { name: 'White branded Tshirt', image: '/Image8.jpg' },
-    { name: 'White branded Tshirt', image: '/Image4.jpg' },
   ];
 
   return (
     <section className="bg-gray-100 py-16">
       <h2 className="text-3xl text-black font-bold text-center mb-6">TRENDING</h2>
-      <div className="flex justify-center gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-4">
         {products.map((product, index) => (
           <div key={index} className="bg-white text-gray-800 shadow-lg rounded-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <div className="relative w-64 h-64">
+            <div className="relative w-full h-64">
               <Image
                 src={product.image}
                 alt={product.name}
