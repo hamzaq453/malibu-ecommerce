@@ -9,6 +9,7 @@ const page = () => {
       <HeroSection />
       <Category />
       <TrendingProducts />
+      
     </div>
   )
 }
