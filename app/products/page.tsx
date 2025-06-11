@@ -2,24 +2,36 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { client } from '@/sanity/lib/client';
 import { urlFor } from '@/sanity/lib/image';
-import { allProductsQuery } from '@/app/lib/queries';
+// import { allProductsQuery } from '@/app/lib/queries';
 import { SanityProduct } from '@/app/types/sanity';
+import { FaHeart } from 'react-icons/fa';
 
 export default function ProductsPage() {
-  const [hovered, setHovered] = useState<string | null>(null);
+  const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
   const [price, setPrice] = useState<number>(150);
   const [products, setProducts] = useState<SanityProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedSizes, setSelectedSizes] = useState<{ [key: string]: string | null }>({});
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         setLoading(true);
         setError(null);
-        const data = await client.fetch<SanityProduct[]>(allProductsQuery);
+        const query = `*[_type == "product"]{
+          _id,
+          name,
+          slug,
+          price,
+          compareAtPrice,
+          images,
+          sizes
+        }`;
+        const data = await client.fetch<SanityProduct[]>(query);
         if (!data) {
           throw new Error('No products found');
         }
@@ -27,7 +39,7 @@ export default function ProductsPage() {
       } catch (err) {
         console.error('Error fetching products:', err);
         setError(err instanceof Error ? err.message : 'Failed to fetch products');
-        setProducts([]); // Set empty array on error
+        setProducts([]);
       } finally {
         setLoading(false);
       }
@@ -35,6 +47,13 @@ export default function ProductsPage() {
 
     fetchProducts();
   }, []);
+
+  const handleSizeSelect = (productId: string, size: string) => {
+    setSelectedSizes(prev => ({
+      ...prev,
+      [productId]: size
+    }));
+  };
 
   const colors = [
     'bg-white', 'bg-black', 'bg-red-500', 'bg-blue-500',
@@ -146,42 +165,60 @@ export default function ProductsPage() {
             {products.map((product) => (
               <div
                 key={product._id}
-                className="relative group border border-gray-200 rounded-lg overflow-hidden transition-shadow hover:shadow-xl"
-                onMouseEnter={() => setHovered(product._id)}
-                onMouseLeave={() => setHovered(null)}
+                className="group relative"
+                onMouseEnter={() => setHoveredProduct(product._id)}
+                onMouseLeave={() => setHoveredProduct(null)}
               >
-                <div className="relative w-full h-[300px]">
-                  {product.images && product.images[0] && (
-                    <Image
-                      src={urlFor(product.images[0]).url()}
-                      alt={product.name}
-                      fill
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    />
-                  )}
+                {/* Product Image */}
+                <Link href={`/products/${product.slug?.current || ''}`}>
+                  <div className="relative aspect-[3/4] overflow-hidden bg-gray-100">
+                    {product.images && product.images[0] && (
+                      <Image
+                        src={urlFor(product.images[0]).url()}
+                        alt={product.name}
+                        fill
+                        className="object-cover object-center transition-transform duration-300 group-hover:scale-105"
+                      />
+                    )}
+                    {/* Wishlist Heart */}
+                    <button className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/80 hover:bg-white">
+                      <FaHeart className="w-4 h-4 text-gray-400 hover:text-red-500" />
+                    </button>
 
-                  <div
-                    className={`absolute bottom-0 left-0 w-full flex flex-wrap justify-center gap-2 p-2 transition-all duration-300 ${
-                      hovered === product._id ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'
-                    }`}
-                  >
-                    {product.sizes?.map((sizeObj) => (
-                      <span
-                        key={sizeObj.size}
-                        className="bg-white text-black text-xs px-2 py-1 border border-gray-400 rounded"
-                      >
-                        {sizeObj.size}
-                      </span>
-                    ))}
+                    {/* Quick Add Size Overlay */}
+                    <div
+                      className={`absolute bottom-[10%] left-0 right-0 bg-black/40 backdrop-blur-[2px] py-3 transition-all duration-300 ${
+                        hoveredProduct === product._id ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                      }`}
+                    >
+                      <div className="flex flex-wrap justify-center gap-2 px-2">
+                        {product.sizes?.map((sizeObj) => (
+                          <button
+                            key={sizeObj.size}
+                            onClick={() => handleSizeSelect(product._id, sizeObj.size)}
+                            className={`px-3 py-1.5 text-xs font-medium border rounded-md transition-colors
+                              ${
+                                selectedSizes[product._id] === sizeObj.size
+                                  ? 'border-white bg-white text-black'
+                                  : 'border-gray-300 bg-black/30 text-white hover:bg-black/50'
+                              }
+                            `}
+                          >
+                            {sizeObj.size}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
                   </div>
-                </div>
+                </Link>
 
-                <div className="p-3 text-center">
-                  <h3 className="text-sm font-medium text-gray-900 line-clamp-2">{product.name}</h3>
-                  <p className="text-sm text-gray-700 mt-1">
-                    ${product.price.toFixed(2)} USD
+                {/* Product Info - Now always visible */}
+                <div className="mt-4 text-center">
+                  <h3 className="text-sm font-medium text-gray-900">{product.name}</h3>
+                  <p className="mt-1 text-sm font-medium text-gray-900">
+                    ${product.price?.toFixed(2)} USD
                     {product.compareAtPrice && (
-                      <span className="ml-2 line-through text-gray-500">
+                      <span className="ml-2 text-sm text-gray-500 line-through">
                         ${product.compareAtPrice.toFixed(2)} USD
                       </span>
                     )}

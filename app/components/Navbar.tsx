@@ -8,22 +8,35 @@ import {
   FaTimes,
 } from 'react-icons/fa';
 import Image from 'next/image';
+import { useCart } from '../context/CartContext';
 
 const categories = [
-  { name: 'NEW IN', img: '/Hero3.png' },
-  { name: 'BACK IN STOCK', img: '/Hero4.png' },
-  { name: 'CLOTHING', img: '/Hero3.png' },
-  { name: 'OCCASIONS', img: '/Hero4.png' },
-  { name: 'TOPS', img: '/Hero3.png' },
-  { name: 'DRESSES', img: '/Hero4.png' },
-  { name: 'LOUNGEWEAR', img: '/Hero3.png' },
-  { name: 'SETS', img: '/Hero4.png' },
-  { name: 'BOTTOMS', img: '/Hero3.png' },
-  { name: 'SWIMWEAR', img: '/Hero4.png' },
+  { name: 'New Arrivals', img: '/Hero3.png' },
+  { name: 'Clothing', img: '/Hero4.png', subcategories: [
+    'Hoodies and Sweaters',
+    'Tshirts and Tees',
+    'Sweaters and Hoodies',
+    'Bottoms',
+    'Lounge Sets',
+    'Occasions',
+  ] },
+  { name: 'Loungewear', img: '/Hero3.png' },
+  { name: 'Occasions', img: '/Hero4.png' },
+  { name: 'Sets', img: '/Hero3.png' },
+  { name: 'Bottoms', img: '/Hero4.png' },
+  { name: 'Accessories', img: '/Hero3.png' },
 ];
 
 const Navbar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [clothingExpanded, setClothingExpanded] = useState(false);
+  const { items, openCart } = useCart();
+
+  const cartItemCount = items.reduce((total, item) => total + item.quantity, 0);
+
+  const handleClothingToggle = () => {
+    setClothingExpanded(!clothingExpanded);
+  };
 
   return (
     <nav className="w-full relative z-50">
@@ -56,9 +69,20 @@ const Navbar: React.FC = () => {
         {/* Icons */}
         <div className="flex items-center gap-4 md:gap-6">
           <FaSearch className="w-5 h-5 cursor-pointer" />
-          <FaHeart className="w-5 h-5 cursor-pointer" />
-          <span className="text-xs hidden md:inline">0</span>
-          <FaShoppingBag size={20} className="cursor-pointer" />
+          <div className="relative">
+            <FaHeart className="w-5 h-5 cursor-pointer" />
+            <span className="absolute -top-2 -right-2 bg-pink-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+              0
+            </span>
+          </div>
+          <div className="relative cursor-pointer" onClick={openCart}>
+            <FaShoppingBag className="w-5 h-5" />
+            {cartItemCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-pink-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                {cartItemCount}
+              </span>
+            )}
+          </div>
         </div>
       </div>
 
@@ -66,13 +90,29 @@ const Navbar: React.FC = () => {
       <div className="hidden md:flex bg-black text-white px-6 py-2 border-t border-gray-800">
         <div className="flex justify-evenly w-full text-sm font-bold uppercase">
           {categories.map((cat) => (
-            <a
-              key={cat.name}
-              href="#"
-              className="hover:text-pink-400 transition-colors whitespace-nowrap"
-            >
-              {cat.name}
-            </a>
+            <div key={cat.name} className="relative group">
+              <a
+                href="#"
+                className="hover:text-pink-400 transition-colors whitespace-nowrap inline-block"
+              >
+                {cat.name}
+              </a>
+              {cat.subcategories && (
+                <div className="absolute left-0 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                  <div className="w-48 bg-white text-black shadow-lg rounded-md">
+                    {cat.subcategories.map((subcat) => (
+                      <a
+                        key={subcat}
+                        href={cat.name === 'Clothing' && subcat === 'Hoodies and Sweaters' ? '/products' : '#'}
+                        className="block px-4 py-2 hover:bg-gray-100"
+                      >
+                        {subcat}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           ))}
         </div>
       </div>
@@ -101,24 +141,39 @@ const Navbar: React.FC = () => {
           {/* Category Links */}
           <div className="py-2">
             {categories.map((cat) => (
-              <a
-                key={cat.name}
-                href="#"
-                className="flex items-center justify-between px-6 py-4 hover:bg-gray-50 transition-colors"
-              >
-                <span className="text-black text-base font-medium tracking-wide">
-                  {cat.name}
-                </span>
-                <div className="relative w-16 h-12 rounded-sm overflow-hidden">
-                  <Image
-                    src={cat.img}
-                    alt={cat.name}
-                    fill
-                    sizes="64px"
-                    className="object-cover"
-                  />
-                </div>
-              </a>
+              <div key={cat.name}>
+                <a
+                  href="#"
+                  className="flex items-center justify-between px-6 py-4 hover:bg-gray-50 transition-colors"
+                  onClick={cat.name === 'Clothing' ? handleClothingToggle : undefined}
+                >
+                  <span className="text-black text-base font-medium tracking-wide">
+                    {cat.name}
+                  </span>
+                  <div className="relative w-16 h-12 rounded-sm overflow-hidden">
+                    <Image
+                      src={cat.img}
+                      alt={cat.name}
+                      fill
+                      sizes="64px"
+                      className="object-cover"
+                    />
+                  </div>
+                </a>
+                {cat.name === 'Clothing' && clothingExpanded && cat.subcategories && (
+                  <div className="pl-6">
+                    {cat.subcategories.map((subcat) => (
+                      <a
+                        key={subcat}
+                        href={cat.name === 'Clothing' && subcat === 'Hoodies and Sweaters' ? '/products' : '#'}
+                        className="block px-4 py-2 text-black hover:bg-gray-100"
+                      >
+                        {subcat}
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
             ))}
           </div>
 
