@@ -22,6 +22,18 @@ const ProductDetailPage: React.FC = () => {
   const [showZoom, setShowZoom] = useState(false);
   const { addItem } = useCart();
 
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!showZoom) return;
+    const image = e.currentTarget.querySelector('img');
+    if (!image) return;
+    
+    const rect = image.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width * 100;
+    const y = (e.clientY - rect.top) / rect.height * 100;
+    
+    image.style.transformOrigin = `${x}% ${y}%`;
+  };
+
   React.useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -47,6 +59,13 @@ const ProductDetailPage: React.FC = () => {
           throw new Error('Product not found');
         }
         setProduct(data);
+
+        // Check if product is in favorites
+        const storedFavorites = localStorage.getItem('favorites');
+        if (storedFavorites) {
+          const favorites = JSON.parse(storedFavorites);
+          setIsWishlist(favorites.includes(data._id));
+        }
       } catch (err) {
         console.error('Error fetching product:', err);
         setError(err instanceof Error ? err.message : 'Failed to fetch product');
@@ -67,11 +86,6 @@ const ProductDetailPage: React.FC = () => {
     setSelectedSize(size);
   };
 
-  const handleMouseMove = () => {
-    if (!showZoom) return;
-    // Zoom functionality removed
-  };
-
   const handleAddToCart = () => {
     if (!selectedSize || !product || !product.images?.[0]) return;
     
@@ -83,6 +97,29 @@ const ProductDetailPage: React.FC = () => {
       quantity: 1,
       image: product.images[0],
     });
+  };
+
+  const toggleWishlist = () => {
+    if (!product) return;
+
+    const storedFavorites = localStorage.getItem('favorites');
+    let favorites: string[] = [];
+    
+    if (storedFavorites) {
+      favorites = JSON.parse(storedFavorites);
+    }
+
+    if (isWishlist) {
+      favorites = favorites.filter(id => id !== product._id);
+    } else {
+      favorites.push(product._id);
+    }
+
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+    setIsWishlist(!isWishlist);
+    
+    // Dispatch custom event to notify other components
+    window.dispatchEvent(new Event('favoritesUpdated'));
   };
 
   if (loading) {
@@ -117,9 +154,9 @@ const ProductDetailPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {/* Main Product Section */}
-        <div className="flex flex-col md:flex-row gap-8 mb-16">
+        <div className="flex flex-col md:flex-row gap-4 md:gap-8 mb-8 md:mb-16">
           {/* Left Side: Image Gallery */}
           <div className="flex-1 self-start flex flex-col md:flex-row md:gap-4 md:sticky md:top-4">
             {/* Thumbnails */}
@@ -145,17 +182,32 @@ const ProductDetailPage: React.FC = () => {
             {/* Main Image */}
             <div className="w-full md:flex-1">
               <div className="relative">
-                <div className="relative h-[500px]">
+                <div 
+                  className="relative h-[400px] sm:h-[400px] md:h-[500px]"
+                  onMouseEnter={() => setShowZoom(true)}
+                  onMouseLeave={() => setShowZoom(false)}
+                  onMouseMove={handleMouseMove}
+                >
                   {product.images && product.images[currentImageIndex] && (
-                    <Image
-                      src={urlFor(product.images[currentImageIndex]).url()}
-                      alt={product.name}
-                      fill
-                      className="object-cover"
-                      onMouseEnter={() => setShowZoom(true)}
-                      onMouseLeave={() => setShowZoom(false)}
-                      onMouseMove={handleMouseMove}
-                    />
+                    <div className="block md:hidden w-full h-full relative">
+                      <Image
+                        src={urlFor(product.images[currentImageIndex]).url()}
+                        alt={product.name}
+                        width={400}
+                        height={400}
+                        className={`object-cover w-full h-full rounded transition-transform duration-200 ${showZoom ? 'scale-150' : 'scale-100'}`}
+                      />
+                    </div>
+                  )}
+                  {product.images && product.images[currentImageIndex] && (
+                    <div className="hidden md:block w-full h-full relative">
+                      <Image
+                        src={urlFor(product.images[currentImageIndex]).url()}
+                        alt={product.name}
+                        fill
+                        className={`object-cover rounded transition-transform duration-200 ${showZoom ? 'scale-150' : 'scale-100'}`}
+                      />
+                    </div>
                   )}
                 </div>
 
@@ -187,12 +239,12 @@ const ProductDetailPage: React.FC = () => {
           </div>
 
           {/* Right Side: Product Details */}
-          <div className="w-full md:w-96 space-y-6">
+          <div className="w-full md:w-96 space-y-4 md:space-y-6">
             {/* Product Title and Wishlist */}
             <div className="flex justify-between items-center">
               <h1 className="text-xl md:text-2xl font-semibold text-gray-800">{product.name}</h1>
               <button
-                onClick={() => setIsWishlist(!isWishlist)}
+                onClick={toggleWishlist}
                 className="text-gray-400 hover:text-red-500 transition-colors"
               >
                 {isWishlist ? <FaHeart className="text-red-500" /> : <FaRegHeart />}
@@ -204,36 +256,12 @@ const ProductDetailPage: React.FC = () => {
               <p className="text-lg md:text-3xl text-gray-700 font-semibold">
                 ${product.price?.toFixed(2)} USD
               </p>
-              {/* <p className="text-xs text-gray-500 mt-1">
-                Or 4 installments of ${(product.price / 4).toFixed(2)} USD with{' '}
-                <span className="underline font-medium">Afterpay</span>
-                <a href="#" className="ml-1 text-gray-500 underline text-xs">
-                  Learn More
-                </a>
-              </p> */}
             </div>
-
-           
 
             {/* Shipping Banner */}
             <div className="w-full bg-pink-300 text-pink-900 text-center text-sm font-semibold py-2 rounded">
                2 DAY SHIPPING
             </div>
-
-            {/* Color Selection */}
-            {/* <div className="space-y-4">
-              <h3 className="text-sm font-semibold text-gray-800">MORE COLOURS</h3>
-              <div className="grid grid-cols-4 gap-2">
-                {colorVariants.map((color, index) => (
-                  <div
-                    key={color.name}
-                    className="relative w-full h-16 rounded-md overflow-hidden border border-gray-200 cursor-pointer"
-                    style={{ backgroundColor: `hsl(${(index * 137) % 360}, 70%, 60%)` }}
-                    title={color.name}
-                  />
-                ))}
-              </div>
-            </div> */}
 
             {/* Size Selection */}
             <div className="space-y-2">
@@ -241,9 +269,6 @@ const ProductDetailPage: React.FC = () => {
                 <p className="text-sm font-medium text-gray-700">
                   Size: {selectedSize || 'Select a size'}
                 </p>
-                {/* <a href="#" className="text-sm text-gray-500 underline">
-                  Size Guide
-                </a> */}
               </div>
               <div className="grid grid-cols-3 gap-2">
                 {product.sizes?.map((sizeObj) => (
