@@ -7,7 +7,7 @@ import { client } from '@/sanity/lib/client';
 import { urlFor } from '@/sanity/lib/image';
 // import { allProductsQuery } from '@/app/lib/queries';
 import { SanityProduct } from '@/app/types/sanity';
-import { FaHeart } from 'react-icons/fa';
+import { FaHeart, FaRegHeart } from 'react-icons/fa';
 
 export default function ProductsPage() {
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
@@ -16,6 +16,32 @@ export default function ProductsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedSizes, setSelectedSizes] = useState<{ [key: string]: string | null }>({});
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [favorites, setFavorites] = useState<string[]>([]);
+
+  // Removed useEffect to control body overflow to prevent infinite re-render and black screen issue
+  // useEffect(() => {
+  //   if (isFilterOpen) {
+  //     document.documentElement.style.overflow = 'hidden'; // Target html for full page scroll lock
+  //     document.body.style.overflow = 'hidden';
+  //   } else {
+  //     document.documentElement.style.overflow = '';
+  //     document.body.style.overflow = '';
+  //   }
+
+  //   return () => {
+  //     document.documentElement.style.overflow = '';
+  //     document.body.style.overflow = '';
+  //   };
+  // }, [isFilterOpen]);
+
+  useEffect(() => {
+    // Get favorites from localStorage
+    const storedFavorites = localStorage.getItem('favorites');
+    if (storedFavorites) {
+      setFavorites(JSON.parse(storedFavorites));
+    }
+  }, []);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -55,6 +81,21 @@ export default function ProductsPage() {
     }));
   };
 
+  const toggleFavorite = (productId: string, e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent navigation when clicking the heart
+    e.stopPropagation(); // Prevent event bubbling
+
+    const newFavorites = favorites.includes(productId)
+      ? favorites.filter(id => id !== productId)
+      : [...favorites, productId];
+
+    setFavorites(newFavorites);
+    localStorage.setItem('favorites', JSON.stringify(newFavorites));
+    
+    // Dispatch custom event to notify other components
+    window.dispatchEvent(new Event('favoritesUpdated'));
+  };
+
   const colors = [
     'bg-white', 'bg-black', 'bg-red-500', 'bg-blue-500',
     'bg-pink-400', 'bg-green-500', 'bg-yellow-400', 'bg-orange-400',
@@ -89,9 +130,22 @@ export default function ProductsPage() {
   );
 
   return (
-    <div className="flex min-h-screen bg-white text-gray-900">
+    <div className={`relative flex flex-col md:flex-row min-h-screen bg-white text-gray-900`}>
       {/* Sidebar */}
-      <aside className="w-72 p-6 border-r border-gray-200 sticky top-0 h-screen overflow-y-auto bg-white sidebar-scrollbar">
+      <aside className={`fixed top-[64px] right-0 w-64 p-6 border-l border-gray-200 bottom-0 overflow-y-auto bg-white sidebar-scrollbar z-40 transition-transform duration-300 pb-20 ${
+        isFilterOpen ? 'translate-x-0' : 'translate-x-full'
+      } md:static md:translate-x-0 md:h-screen`}>
+        <div className="flex justify-between items-center md:hidden mb-4">
+          <h2 className="font-bold text-lg">Filters</h2>
+          <button
+            onClick={() => setIsFilterOpen(false)}
+            className="p-2 hover:bg-gray-100 rounded-full"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
         <h2 className="font-bold text-lg mb-4">DRESSES</h2>
         <ul className="space-y-3 text-sm text-gray-700">
           {[
@@ -151,7 +205,29 @@ export default function ProductsPage() {
       </aside>
 
       {/* Product Grid */}
-      <main className="flex-1 p-8">
+      <main className={`flex-1 py-4 px-2 md:p-8 overflow-y-auto`}>
+        {/* Mobile Filter Button */}
+        <div className="md:hidden mb-4">
+          <button
+            onClick={() => setIsFilterOpen(true)}
+            className="flex items-center text-lg font-bold text-gray-900 focus:outline-none"
+          >
+            FILTERS
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 ml-1 transition-transform duration-200"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </button>
+        </div>
+
         {loading ? (
           <LoadingSkeleton />
         ) : error ? (
@@ -161,7 +237,7 @@ export default function ProductsPage() {
             <p className="text-gray-500">No products found</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
             {products.map((product) => (
               <div
                 key={product._id}
@@ -181,22 +257,33 @@ export default function ProductsPage() {
                       />
                     )}
                     {/* Wishlist Heart */}
-                    <button className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/80 hover:bg-white">
-                      <FaHeart className="w-4 h-4 text-gray-400 hover:text-red-500" />
+                    <button 
+                      onClick={(e) => toggleFavorite(product._id, e)}
+                      className="absolute top-2 right-2 md:top-4 md:right-4 z-10 p-1.5 md:p-2 rounded-full bg-white/80 hover:bg-white shadow-sm"
+                    >
+                      {favorites.includes(product._id) ? (
+                        <FaHeart className="w-3 h-3 md:w-4 md:h-4 text-red-500" />
+                      ) : (
+                        <FaRegHeart className="w-3 h-3 md:w-4 md:h-4 text-gray-400 hover:text-red-500" />
+                      )}
                     </button>
 
                     {/* Quick Add Size Overlay */}
                     <div
-                      className={`absolute bottom-[10%] left-0 right-0 bg-black/40 backdrop-blur-[2px] py-3 transition-all duration-300 ${
+                      className={`absolute bottom-[10%] left-0 right-0 bg-black/40 backdrop-blur-[2px] py-2 md:py-3 transition-all duration-300 ${
                         hoveredProduct === product._id ? 'opacity-100' : 'opacity-0 pointer-events-none'
                       }`}
                     >
-                      <div className="flex flex-wrap justify-center gap-2 px-2">
+                      <div className="flex flex-wrap justify-center gap-1 md:gap-2 px-1 md:px-2">
                         {product.sizes?.map((sizeObj) => (
                           <button
                             key={sizeObj.size}
-                            onClick={() => handleSizeSelect(product._id, sizeObj.size)}
-                            className={`px-3 py-1.5 text-xs font-medium border rounded-md transition-colors
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              handleSizeSelect(product._id, sizeObj.size);
+                            }}
+                            className={`px-2 md:px-3 py-1 md:py-1.5 text-xs font-medium border rounded-md transition-colors
                               ${
                                 selectedSizes[product._id] === sizeObj.size
                                   ? 'border-white bg-white text-black'
@@ -212,13 +299,13 @@ export default function ProductsPage() {
                   </div>
                 </Link>
 
-                {/* Product Info - Now always visible */}
-                <div className="mt-4 text-center">
-                  <h3 className="text-sm font-medium text-gray-900">{product.name}</h3>
-                  <p className="mt-1 text-sm font-medium text-gray-900">
+                {/* Product Info */}
+                <div className="mt-2 md:mt-4 text-center">
+                  <h3 className="text-xs md:text-sm font-medium text-gray-900">{product.name}</h3>
+                  <p className="mt-1 text-xs md:text-sm font-medium text-gray-900">
                     ${product.price?.toFixed(2)} USD
                     {product.compareAtPrice && (
-                      <span className="ml-2 text-sm text-gray-500 line-through">
+                      <span className="ml-1 md:ml-2 text-xs md:text-sm text-gray-500 line-through">
                         ${product.compareAtPrice.toFixed(2)} USD
                       </span>
                     )}
@@ -229,6 +316,14 @@ export default function ProductsPage() {
           </div>
         )}
       </main>
+
+      {/* Overlay for mobile filter */}
+      {isFilterOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden backdrop-filter backdrop-blur-md"
+          onClick={() => setIsFilterOpen(false)}
+        />
+      )}
 
       {/* Scrollbar style */}
       <style jsx>{`

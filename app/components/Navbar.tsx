@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   FaHeart,
   FaShoppingBag,
@@ -9,6 +9,7 @@ import {
 } from 'react-icons/fa';
 import Image from 'next/image';
 import { useCart } from '../context/CartContext';
+import Link from 'next/link';
 
 const categories = [
   { name: 'New Arrivals', img: '/Hero3.png' },
@@ -30,9 +31,41 @@ const categories = [
 const Navbar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [clothingExpanded, setClothingExpanded] = useState(false);
+  const [favorites, setFavorites] = useState<string[]>([]);
   const { items, openCart } = useCart();
 
   const cartItemCount = items.reduce((total, item) => total + item.quantity, 0);
+
+  // Function to update favorites from localStorage
+  const updateFavorites = () => {
+    const storedFavorites = localStorage.getItem('favorites');
+    if (storedFavorites) {
+      setFavorites(JSON.parse(storedFavorites));
+    } else {
+      setFavorites([]);
+    }
+  };
+
+  // Initial load of favorites
+  useEffect(() => {
+    updateFavorites();
+  }, []);
+
+  // Listen for changes in localStorage
+  useEffect(() => {
+    const handleStorageChange = () => {
+      updateFavorites();
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    // Also listen for custom event for same-tab updates
+    window.addEventListener('favoritesUpdated', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('favoritesUpdated', handleStorageChange);
+    };
+  }, []);
 
   const handleClothingToggle = () => {
     setClothingExpanded(!clothingExpanded);
@@ -69,12 +102,14 @@ const Navbar: React.FC = () => {
         {/* Icons */}
         <div className="flex items-center gap-4 md:gap-6">
           <FaSearch className="w-5 h-5 cursor-pointer" />
-          <div className="relative">
+          <Link href="/favorites" className="relative">
             <FaHeart className="w-5 h-5 cursor-pointer" />
-            <span className="absolute -top-2 -right-2 bg-pink-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
-              0
-            </span>
-          </div>
+            {favorites.length > 0 && (
+              <span className="absolute -top-2 -right-2 bg-pink-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                {favorites.length}
+              </span>
+            )}
+          </Link>
           <div className="relative cursor-pointer" onClick={openCart}>
             <FaShoppingBag className="w-5 h-5" />
             {cartItemCount > 0 && (
@@ -200,7 +235,7 @@ const Navbar: React.FC = () => {
               <button className="flex-1 bg-black text-white py-2 text-sm font-medium">
                 Sign In
               </button>
-              <button className="flex-1 border border-black py-2 text-sm font-medium">
+              <button className="flex-1 bg-white text-black py-2 text-sm font-medium border border-black">
                 Register
               </button>
             </div>
