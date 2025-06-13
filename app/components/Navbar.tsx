@@ -97,7 +97,7 @@ const Navbar: React.FC = () => {
             alt="Logo"
             width={140}
             height={40}
-            className="mx-auto h-10 w-auto object-contain"
+            className="mx-auto h-10 w-auto object-contain opacity-50"
           />
         </div>
 
@@ -169,19 +169,19 @@ const Navbar: React.FC = () => {
         {/* Sidebar Content */}
         <div className="relative bg-white w-[75%] h-full overflow-y-auto">
           {/* Close Button */}
-          <div className="flex justify-end p-4 border-b border-gray-100">
+          <div className="flex justify-end p-2 border-b border-gray-100">
             <button onClick={() => setMenuOpen(false)}>
               <FaTimes className="w-6 h-6 text-black" />
             </button>
           </div>
 
           {/* Category Links */}
-          <div className="py-2">
+          <div className="py-1">
             {categories.map((cat) => (
               <div key={cat.name}>
                 <a
                   href={cat.name === 'Home' ? '/' : cat.name === 'Other Brands' ? '/other-brands' : '#'}
-                  className="flex items-center justify-between px-6 py-4 hover:bg-gray-50 transition-colors"
+                  className="flex items-center justify-between px-6 py-3 hover:bg-gray-50 transition-colors"
                   onClick={cat.name === 'Clothing' ? handleClothingToggle : undefined}
                 >
                   <span className="text-black text-sm font-mono tracking-wide uppercase">
