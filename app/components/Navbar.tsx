@@ -12,8 +12,9 @@ import { useCart } from '../context/CartContext';
 import Link from 'next/link';
 
 const categories = [
-  { name: 'New Arrivals', img: '/Hero3.png' },
-  { name: 'Clothing', img: '/Hero4.png', subcategories: [
+  { name: 'Home', img: '/Image2.png' },
+  { name: 'New Arrivals', img: '/Image1.png' },
+  { name: 'Clothing', img: '/Image2.png', subcategories: [
     'Hoodies and Sweaters',
     'Tshirts and Tees',
     'Sweaters and Hoodies',
@@ -21,11 +22,12 @@ const categories = [
     'Lounge Sets',
     'Occasions',
   ] },
-  { name: 'Loungewear', img: '/Hero3.png' },
-  { name: 'Occasions', img: '/Hero4.png' },
-  { name: 'Sets', img: '/Hero3.png' },
-  { name: 'Bottoms', img: '/Hero4.png' },
-  { name: 'Accessories', img: '/Hero3.png' },
+  { name: 'Loungewear', img: '/Image2.png' },
+  { name: 'Occasions', img: '/Image1.png' },
+  { name: 'Sets', img: '/Image2.png' },
+  { name: 'Bottoms', img: '/Image1.png' },
+  { name: 'Accessories', img: '/Image2.png' },
+  { name: 'Other Brands', img: '/Image1.png' },
 ];
 
 const Navbar: React.FC = () => {
@@ -95,7 +97,7 @@ const Navbar: React.FC = () => {
             alt="Logo"
             width={140}
             height={40}
-            className="mx-auto h-10 w-auto object-contain"
+            className="mx-auto h-10 w-auto object-contain opacity-50"
           />
         </div>
 
@@ -123,11 +125,11 @@ const Navbar: React.FC = () => {
 
       {/* Desktop Category Menu */}
       <div className="hidden md:flex bg-black text-white px-6 py-2 border-t border-gray-800">
-        <div className="flex justify-evenly w-full text-sm font-bold uppercase">
+        <div className="flex justify-evenly w-full text-sm font-mono uppercase">
           {categories.map((cat) => (
             <div key={cat.name} className="relative group">
               <a
-                href="#"
+                href={cat.name === 'Home' ? '/' : cat.name === 'Other Brands' ? '/other-brands' : '#'}
                 className="hover:text-pink-400 transition-colors whitespace-nowrap inline-block"
               >
                 {cat.name}
@@ -167,22 +169,22 @@ const Navbar: React.FC = () => {
         {/* Sidebar Content */}
         <div className="relative bg-white w-[75%] h-full overflow-y-auto">
           {/* Close Button */}
-          <div className="flex justify-end p-4 border-b border-gray-100">
+          <div className="flex justify-end p-2 border-b border-gray-100">
             <button onClick={() => setMenuOpen(false)}>
               <FaTimes className="w-6 h-6 text-black" />
             </button>
           </div>
 
           {/* Category Links */}
-          <div className="py-2">
+          <div className="py-1">
             {categories.map((cat) => (
               <div key={cat.name}>
                 <a
-                  href="#"
-                  className="flex items-center justify-between px-6 py-4 hover:bg-gray-50 transition-colors"
+                  href={cat.name === 'Home' ? '/' : cat.name === 'Other Brands' ? '/other-brands' : '#'}
+                  className="flex items-center justify-between px-6 py-3 hover:bg-gray-50 transition-colors"
                   onClick={cat.name === 'Clothing' ? handleClothingToggle : undefined}
                 >
-                  <span className="text-black text-base font-medium tracking-wide">
+                  <span className="text-black text-sm font-mono tracking-wide uppercase">
                     {cat.name}
                   </span>
                   <div className="relative w-16 h-12 rounded-sm overflow-hidden">
@@ -211,35 +213,6 @@ const Navbar: React.FC = () => {
               </div>
             ))}
           </div>
-
-          {/* Additional Links */}
-          {/* <div className="border-t border-gray-100 py-4 px-6">
-            <a href="#" className="block py-3 text-black font-medium">
-              Customer Care
-            </a>
-            <a href="#" className="block py-3 text-black font-medium">
-              Track My Order
-            </a>
-            <a href="#" className="block py-3 text-black font-medium">
-              Size Guide
-            </a>
-          </div> */}
-
-          {/* Account Section */}
-          {/* <div className="border-t border-gray-100 py-4 px-6">
-            <div className="flex items-center gap-2 mb-3">
-              <FaUser className="w-5 h-5" />
-              <span className="font-medium">Account</span>
-            </div>
-            <div className="flex gap-4">
-              <button className="flex-1 bg-black text-white py-2 text-sm font-medium">
-                Sign In
-              </button>
-              <button className="flex-1 bg-white text-black py-2 text-sm font-medium border border-black">
-                Register
-              </button>
-            </div>
-          </div> */}
         </div>
       </div>
     </nav>
