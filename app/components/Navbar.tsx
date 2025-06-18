@@ -93,11 +93,11 @@ const Navbar: React.FC = () => {
         {/* Logo */}
         <div className="flex-grow text-center">
           <Image
-            src="/Logo.png"
+            src="/Logo.jpg"
             alt="Logo"
             width={140}
             height={40}
-            className="mx-auto h-10 w-auto object-contain opacity-50"
+            className="mx-auto h-10 w-auto object-contain"
           />
         </div>
 
@@ -176,15 +176,15 @@ const Navbar: React.FC = () => {
           </div>
 
           {/* Category Links */}
-          <div className="py-1">
+          <div className="py-1 ml-2 mr-2">
             {categories.map((cat) => (
-              <div key={cat.name}>
+              <div key={cat.name} className="mb-2">
                 <a
                   href={cat.name === 'Home' ? '/' : cat.name === 'Other Brands' ? '/other-brands' : '#'}
-                  className="flex items-center justify-between px-6 py-3 hover:bg-gray-50 transition-colors"
+                  className="flex items-center justify-between px-6 py-3 bg-gray-100 hover:bg-gray-300 transition-colors"
                   onClick={cat.name === 'Clothing' ? handleClothingToggle : undefined}
                 >
-                  <span className="text-black text-sm font-mono tracking-wide uppercase">
+                  <span className="text-black text-sm font-semibold tracking-wide uppercase">
                     {cat.name}
                   </span>
                   <div className="relative w-16 h-12 rounded-sm overflow-hidden">
@@ -198,12 +198,12 @@ const Navbar: React.FC = () => {
                   </div>
                 </a>
                 {cat.name === 'Clothing' && clothingExpanded && cat.subcategories && (
-                  <div className="pl-6">
+                  <div className="pl-6 bg-gray-50">
                     {cat.subcategories.map((subcat) => (
                       <a
                         key={subcat}
                         href={cat.name === 'Clothing' && subcat === 'Hoodies and Sweaters' ? '/products' : '#'}
-                        className="block px-4 py-2 text-black hover:bg-gray-100"
+                        className="block px-4 py-2 text-black hover:bg-gray-200"
                       >
                         {subcat}
                       </a>
