@@ -93,11 +93,11 @@ const Navbar: React.FC = () => {
         {/* Logo */}
         <div className="flex-grow text-center">
           <Image
-            src="/Logo.png"
+            src="/Logo.jpg"
             alt="Logo"
             width={140}
             height={40}
-            className="mx-auto h-10 w-auto object-contain opacity-50"
+            className="mx-auto h-10 w-auto object-contain"
           />
         </div>
 
