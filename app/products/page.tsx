@@ -11,7 +11,7 @@ import { FaHeart, FaRegHeart } from 'react-icons/fa';
 
 export default function ProductsPage() {
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
-  const [price, setPrice] = useState<number>(150);
+  // const [price, setPrice] = useState<number>(150);
   const [products, setProducts] = useState<SanityProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -96,12 +96,12 @@ export default function ProductsPage() {
     window.dispatchEvent(new Event('favoritesUpdated'));
   };
 
-  const colors = [
-    'bg-white', 'bg-black', 'bg-red-500', 'bg-blue-500',
-    'bg-pink-400', 'bg-green-500', 'bg-yellow-400', 'bg-orange-400',
-    'bg-purple-500', 'bg-gray-600', 'bg-lime-400', 'bg-amber-500',
-    'bg-rose-500', 'bg-sky-400', 'bg-indigo-500', 'bg-teal-500'
-  ];
+  // const colors = [
+  //   'bg-white', 'bg-black', 'bg-red-500', 'bg-blue-500',
+  //   'bg-pink-400', 'bg-green-500', 'bg-yellow-400', 'bg-orange-400',
+  //   'bg-purple-500', 'bg-gray-600', 'bg-lime-400', 'bg-amber-500',
+  //   'bg-rose-500', 'bg-sky-400', 'bg-indigo-500', 'bg-teal-500'
+  // ];
 
   // Loading skeleton component
   const LoadingSkeleton = () => (
