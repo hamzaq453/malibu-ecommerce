@@ -132,7 +132,7 @@ export default function ProductsPage() {
   return (
     <div className={`relative flex flex-col md:flex-row min-h-screen bg-white text-gray-900`}>
       {/* Sidebar */}
-      <aside className={`fixed top-[64px] right-0 w-64 p-6 border-l border-gray-200 bottom-0 overflow-y-auto bg-white sidebar-scrollbar z-40 transition-transform duration-300 pb-20 ${
+      {/* <aside className={`fixed top-[64px] right-0 w-64 p-6 border-l border-gray-200 bottom-0 overflow-y-auto bg-white sidebar-scrollbar z-40 transition-transform duration-300 pb-20 ${
         isFilterOpen ? 'translate-x-0' : 'translate-x-full'
       } md:static md:translate-x-0 md:h-screen`}>
         <div className="flex justify-between items-center md:hidden mb-4">
@@ -145,8 +145,8 @@ export default function ProductsPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
-        </div>
-        <h2 className="font-bold text-lg mb-4">DRESSES</h2>
+        </div> */}
+        {/* <h2 className="font-bold text-lg mb-4">DRESSES</h2>
         <ul className="space-y-3 text-sm text-gray-700">
           {[
             "Mini Dresses",
@@ -166,9 +166,9 @@ export default function ProductsPage() {
               {item}
             </li>
           ))}
-        </ul>
+        </ul> */}
 
-        <h2 className="font-bold mt-9 mb-7 text-lg">COLOR</h2>
+        {/* <h2 className="font-bold mt-9 mb-7 text-lg">COLOR</h2>
         <div className="grid grid-cols-4 gap-x-2 gap-y-3">
           {colors.map((bg, i) => (
             <span
@@ -176,9 +176,9 @@ export default function ProductsPage() {
               className={`${bg} w-8 h-8 rounded-full border border-gray-300 cursor-pointer`}
             />
           ))}
-        </div>
+        </div> */}
 
-        <h2 className="font-bold mt-6 mb-2 text-lg">PRICE</h2>
+        {/* <h2 className="font-bold mt-6 mb-2 text-lg">PRICE</h2>
         <div className="mb-4">
           <input
             type="range"
@@ -189,9 +189,9 @@ export default function ProductsPage() {
             className="w-full accent-gray-500"
           />
           <p className="text-sm mt-1 text-gray-600">Up to ${price}</p>
-        </div>
+        </div> */}
 
-        <h2 className="font-bold mt-6 mb-2 text-lg">SIZE</h2>
+        {/* <h2 className="font-bold mt-6 mb-2 text-lg">SIZE</h2>
         <div className="flex flex-wrap gap-2">
           {['XXS', 'XS', 'S', 'M', 'L', 'XL'].map((size) => (
             <span
@@ -201,13 +201,13 @@ export default function ProductsPage() {
               {size}
             </span>
           ))}
-        </div>
-      </aside>
+        </div> */}
+      {/* </aside> */}
 
       {/* Product Grid */}
       <main className={`flex-1 py-4 px-2 md:p-8 overflow-y-auto`}>
         {/* Mobile Filter Button */}
-        <div className="md:hidden mb-4">
+        {/* <div className="md:hidden mb-4">
           <button
             onClick={() => setIsFilterOpen(true)}
             className="flex items-center text-lg font-bold text-gray-900 focus:outline-none"
@@ -226,7 +226,7 @@ export default function ProductsPage() {
               />
             </svg>
           </button>
-        </div>
+        </div> */}
 
         {loading ? (
           <LoadingSkeleton />
