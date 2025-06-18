@@ -16,21 +16,20 @@ const sections = [
   {
     title: "HELP",
     links: [
-      "FAQs", "Shipping", "Refunds & Returns", "Size Guide",
-      "Gift Card", "Contact Us", "Location & Stores",
+      "FAQs", "Shipping", "Refunds & Returns",
+      "Contact Us", "Location & Stores",
     ],
   },
   {
     title: "INFO",
     links: [
-      "Student Offer", "Give $20, Get $20", "Healthcare Offer", "Sign Up",
-      "Privacy Policy", "Fashion Glossary", "Terms and Conditions",
-      "White Fox Sorority", "White Fox University", "Terms of Purchase", "Website Terms",
+       "Sign Up", "Privacy Policy", "Terms and Conditions",
+        "Terms of Purchase", "Website Terms",
     ],
   },
   {
     title: "ABOUT US",
-    links: ["About Us", "Careers", "Accessibility"],
+    links: ["About Us"],
   },
 ];
 
@@ -99,7 +98,7 @@ const Footer = () => {
       {/* Copyright */}
       <div className="mt-12 text-center">
         <p className="text-xs text-gray-500">
-          © 2025 Pink Malibu Boutique.
+          © 2025 Pink Malibu
         </p>
       </div>
     </footer>
