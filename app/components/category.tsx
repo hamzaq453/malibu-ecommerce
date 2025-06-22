@@ -7,10 +7,10 @@ interface Category {
 
 export default function Home() {
   const categories: Category[] = [
-    { name: 'Hoodies', image: '/Image1.jpg' },
-    { name: 'Bottoms', image: '/Image5.jpg' },
-    { name: 'Occasions', image: '/Image4.jpg' },
-    { name: 'Summer Sets', image: '/Image3.jpg' },
+    { name: 'Hoodies', image: '/Image1.png' },
+    { name: 'Bottoms', image: '/Image5.png' },
+    { name: 'Occasions', image: '/Image4.png' },
+    { name: 'Summer Sets', image: '/Image3.png' },
   ];
 
   return (
