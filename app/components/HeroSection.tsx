@@ -84,7 +84,7 @@ const HeroSection: React.FC = () => {
   }, [videosReady]);
 
   return (
-    <section className="relative w-full h-[90vh] md:h-[90vh]">
+    <section className="relative w-full h-[81vh] md:h-[90vh]">
       {/* Video and Image Container */}
       {isMobile ? (
         // Mobile: Single cycling video

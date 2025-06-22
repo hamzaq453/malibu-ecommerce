@@ -81,31 +81,31 @@ const Navbar: React.FC = () => {
       </div>
 
       {/* Main Navbar */}
-      <div className="bg-black text-white flex items-center justify-between px-4 md:px-6 py-3">
+      <div className="bg-black text-white flex items-center justify-between px-4 md:px-6 py-3 min-h-[60px]">
         {/* Mobile Menu Icon */}
-        <div className="md:hidden">
+        <div className="md:hidden flex items-center justify-center w-8">
           <FaBars
-            className="w-5 h-5 cursor-pointer"
+            className="w-6 h-6 cursor-pointer"
             onClick={() => setMenuOpen(true)}
           />
         </div>
 
         {/* Logo */}
-        <div className="flex-grow text-center">
+        <div className="flex-grow flex items-center justify-center">
           <Image
             src="/Logo.jpg"
             alt="Logo"
             width={140}
             height={40}
-            className="mx-auto h-10 w-auto object-contain"
+            className="h-9 -mt-2 w-auto object-contain"
           />
         </div>
 
         {/* Icons */}
-        <div className="flex items-center gap-4 md:gap-6">
-          <FaSearch className="w-5 h-5 cursor-pointer" />
+        <div className="flex items-center gap-4 md:gap-6 w-auto md:w-auto">
+          <FaSearch className="w-6 h-6 cursor-pointer" />
           <Link href="/favorites" className="relative">
-            <FaHeart className="w-5 h-5 cursor-pointer" />
+            <FaHeart className="w-6 h-6 cursor-pointer" />
             {favorites.length > 0 && (
               <span className="absolute -top-2 -right-2 bg-pink-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
                 {favorites.length}
@@ -113,7 +113,7 @@ const Navbar: React.FC = () => {
             )}
           </Link>
           <div className="relative cursor-pointer" onClick={openCart}>
-            <FaShoppingBag className="w-5 h-5" />
+            <FaShoppingBag className="w-6 h-6" />
             {cartItemCount > 0 && (
               <span className="absolute -top-2 -right-2 bg-pink-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
                 {cartItemCount}
@@ -187,7 +187,7 @@ const Navbar: React.FC = () => {
                   <span className="text-black text-sm font-semibold tracking-wide uppercase">
                     {cat.name}
                   </span>
-                  <div className="relative w-16 h-12 rounded-sm overflow-hidden">
+                  <div className="relative w-16 h-12 overflow-hidden">
                     <Image
                       src={cat.img}
                       alt={cat.name}
