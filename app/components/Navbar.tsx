@@ -6,6 +6,7 @@ import {
   FaSearch,
   FaBars,
   FaTimes,
+  FaQuestionCircle,
 } from 'react-icons/fa';
 import Image from 'next/image';
 import { useCart } from '../context/CartContext';
@@ -104,6 +105,9 @@ const Navbar: React.FC = () => {
         {/* Icons */}
         <div className="flex items-center gap-4 md:gap-6 w-auto md:w-auto">
           <FaSearch className="w-6 h-6 cursor-pointer" />
+          <Link href="/support" className="relative hidden md:block">
+            <FaQuestionCircle className="w-6 h-6 cursor-pointer hover:text-pink-400 transition-colors" />
+          </Link>
           <Link href="/favorites" className="relative">
             <FaHeart className="w-6 h-6 cursor-pointer" />
             {favorites.length > 0 && (
@@ -173,6 +177,18 @@ const Navbar: React.FC = () => {
             <button onClick={() => setMenuOpen(false)}>
               <FaTimes className="w-6 h-6 text-black" />
             </button>
+          </div>
+
+          {/* Support Link */}
+          <div className="px-4 py-3 border-b border-gray-200">
+            <Link 
+              href="/support" 
+              className="flex items-center space-x-3 text-pink-600 hover:text-pink-800 transition-colors"
+              onClick={() => setMenuOpen(false)}
+            >
+              <FaQuestionCircle className="w-5 h-5" />
+              <span className="font-semibold">Customer Support</span>
+            </Link>
           </div>
 
           {/* Category Links */}
