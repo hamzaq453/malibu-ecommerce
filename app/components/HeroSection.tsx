@@ -84,7 +84,7 @@ const HeroSection: React.FC = () => {
   }, [videosReady]);
 
   return (
-    <section className="relative w-full h-[90vh] md:h-[90vh]">
+    <section className="relative w-full h-[81vh] md:h-[90vh]">
       {/* Video and Image Container */}
       {isMobile ? (
         // Mobile: Single cycling video
@@ -92,7 +92,7 @@ const HeroSection: React.FC = () => {
           {/* Static Image (shown while video loads) */}
           <div className={`absolute inset-0 transition-opacity duration-1000 ${showVideos ? 'opacity-0' : 'opacity-100'}`}>
             <Image
-              src={currentVideoIndex === 0 ? "/Image1.png" : "/Image2.jpg"}
+              src={currentVideoIndex === 0 ? "/Image1.png" : "/Image6.png"}
               alt={`Hero Image ${currentVideoIndex + 1}`}
               fill
               className="object-cover"
@@ -166,7 +166,7 @@ const HeroSection: React.FC = () => {
             {/* Static Image (shown while video loads) */}
             <div className={`absolute inset-0 transition-opacity duration-1000 ${showVideos ? 'opacity-0' : 'opacity-100'}`}>
               <Image
-                src="/Image2.jpg"
+                src="/Image6.png"
                 alt="Hero Image 2"
                 fill
                 className="object-cover"

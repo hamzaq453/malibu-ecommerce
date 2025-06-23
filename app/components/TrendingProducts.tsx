@@ -3,9 +3,9 @@ import Image from 'next/image';
 
 const TrendingProducts: React.FC = () => {
   const products = [
-    { name: 'Pink Malibu Hoodie', image: '/Image6.jpg' },
-    { name: 'Sky Malibu Hoodie', image: '/Image7.jpg' },
-    { name: 'White branded Tshirt', image: '/Image8.jpg' },
+    { name: 'Pink Malibu Hoodie', image: '/Image6.png' },
+    { name: 'Sky Malibu Hoodie', image: '/Image7.png' },
+    { name: 'White branded Tshirt', image: '/Image8.png' },
   ];
 
   return (
