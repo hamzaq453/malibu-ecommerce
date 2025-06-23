@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
     // Send email to your support email
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
-      to: 'qhamza4532@gmail.com',
+      to: 'info@pink-malibu.com',
       subject: `New Message: ${subject}`,
       html: emailContent,
       replyTo: email,
